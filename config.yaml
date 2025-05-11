@@ -1,0 +1,24 @@
+{
+  "name": "SSH Tunnel for Home Assistant",
+  "version": "1.0",
+  "slug": "ssh_tunnel",
+  "description": "Persistent SSH tunnel for Home Assistant",
+  "startup": "application",
+  "arch": ["amd64", "armv7", "aarch64"],
+  "boot": "auto",
+  "host_network": true,
+  "options": {
+    "ssh_user": "your_ssh_user",
+    "ssh_host": "your.public.server.com",
+    "ssh_pkey": "publich_key",
+    "port": 8123,
+  },
+  "schema": {
+    "ssh_user": "str",
+    "ssh_host": "str",
+    "ssh_pkey": "str",
+    "port": "int",
+  },
+  "requirements": ["autossh"],
+  "homeassistant": true
+}
