@@ -8,17 +8,12 @@
   "boot": "auto",
   "host_network": true,
   "options": {
-    "ssh_user": "your_ssh_user",
-    "ssh_host": "your.public.server.com",
-    "ssh_pkey": "publich_key",
-    "port": 8123,
+    "ssh_host": "name_of_your_ssh_connection_in_ssh_config",
+    "remote_port": 8123
   },
   "schema": {
-    "ssh_user": "str",
     "ssh_host": "str",
-    "ssh_pkey": "str",
-    "port": "int",
+    "remote_port": "int"
   },
-  "requirements": ["autossh"],
   "homeassistant": true
 }
