@@ -1,6 +1,6 @@
-#ARG BUILD_FROM
-#FROM $BUILD_FROM
-FROM ghcr.io/home-assistant/amd64-base:latest
+ARG BUILD_FROM
+FROM $BUILD_FROM
+#FROM ghcr.io/home-assistant/amd64-base:latest
 
 RUN apk update && apk add autossh bash
 
