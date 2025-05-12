@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bashio
+# shellcheck shell=bash
 
 # Ensure ~/.ssh exists and is linked to the config folder version
 mkdir -p /root/.ssh
