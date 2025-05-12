@@ -7,5 +7,5 @@ COPY run.sh /run.sh
 COPY etc/services.d/ /etc/services.d/
 
 # make sure the shell scripts are executable
-RUN chmod +x /run.sh /etc/services.d/ssh_tunnel/run
+RUN chmod +x /run.sh /etc/services.d/ssh-tunnel/run
 
