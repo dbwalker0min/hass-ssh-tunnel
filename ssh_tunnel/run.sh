@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bashio
+#!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
 # Ensure ~/.ssh exists and is linked to the config folder version
@@ -9,8 +9,8 @@ chmod 600 /root/.ssh/*
 # Look at all the options
 cat /data/options.json
 
-SSH_HOST=$(jq -r '.ssh_host' /data/options.json)
-REMOTE_PORT=$(jq -r '.remote_port' /data/options.json)
+SSH_HOST=$(bashio::config 'ssh_host')
+REMOTE_PORT=$(bashio::config 'remote_port' 8123)
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → local port: 8123)"
 
