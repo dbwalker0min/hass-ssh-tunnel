@@ -1,15 +1,4 @@
 name: SSH Tunnel for Home Assistant
-version: '1.0.0'
-slug: ssh_tunnel
-description: Persistent SSH tunnel for Home Assistant
-startup: application
-init: false
-arch:
-  - amd64
-  - armv7
-  - aarch64
-boot: auto
-host_network: true
 options:
   ssh_host: name_of_your_ssh_host
   ssh_user: root
@@ -21,6 +10,7 @@ options:
     YourPrivateKeyHere
     -----END RSA PRIVATE KEY-----
   other_ssh_options: other_ssh_options
+
 schema:
   ssh_host: str
   ssh_user: str
@@ -30,4 +20,8 @@ schema:
   private_ssh_key: str
   other_ssh_options: str
 
-homeassistant: true
+ui:
+  private_ssh_key:
+    name: Private SSH Key
+    description: Paste your SSH private key here
+    multiline: true

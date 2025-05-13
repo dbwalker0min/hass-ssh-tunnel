@@ -3,24 +3,36 @@
 
 echo "Starting SSH tunnel..."
 
-# Look at all the options
-cat /data/options.json
-
-# Ensure ~/.ssh exists and is linked to the config folder version
-mkdir -p /root/.ssh
-cp -r /config/.ssh/* /root/.ssh/
-chown -R root:root /root/.ssh
-chmod 600 /root/.ssh/* 2>/dev/null
-chmod 644 /root/.ssh/*.pub 2>/dev/null
-
+# Write the private SSH key to a temporary file
+PRIVATE_SSH_KEY=$(bashio::config 'private_ssh_key')
+if [ -n "$PRIVATE_SSH_KEY" ]; then
+    echo "$PRIVATE_SSH_KEY" > /tmp/ssh_key
+    chmod 600 /tmp/ssh_key
+    SSH_IDENTITY="/tmp/ssh_key"
+else
+    echo "Error: private_ssh_key is not set in the configuration."
+    exit 1
+fi
 
 SSH_HOST=$(bashio::config 'ssh_host')
 REMOTE_PORT=$(bashio::config 'remote_port' 8123)
+LOCAL_HOST=$(bashio::config 'local_host' 'localhost')
+LOCAL_PORT=$(bashio::config 'local_port' 8123)
+SSH_USER=$(bashio::config 'ssh_user' 'root')
+OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 
-echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → local port: 8123)"
+echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → $LOCAL_HOST:$LOCAL_PORT) as $SSH_USER"
 
 while true; do
-    autossh -M 0 -N -R ${REMOTE_PORT}:localhost:8123 ${SSH_HOST} 2>&1
+    autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
+        -i ${SSH_IDENTITY} \
+        ${OTHER_SSH_OPTIONS} \
+        ${SSH_USER}@${SSH_HOST} 2>&1
+    EXIT_CODE=$?
     echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel disconnected; retrying..."
+
+    if [ $EXIT_CODE -ne 0 ]; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel exited with code $EXIT_CODE; retrying..."
+    fi
     sleep 10
 done
