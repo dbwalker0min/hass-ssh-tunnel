@@ -16,10 +16,7 @@ options:
   remote_port: 8123
   local_host: localhost
   local_port: 8123
-  private_ssh_key: |
-    -----BEGIN RSA PRIVATE KEY-----
-    YourPrivateKeyHere
-    -----END RSA PRIVATE KEY-----
+  ssh_key_path: /config/ssh_tunnel_private_key
   other_ssh_options: -o "ServerAliveInterval 60" -o "ServerAliveCountMax 5"
 
 schema:
@@ -28,7 +25,7 @@ schema:
   remote_port: port
   local_host: str
   local_port: port
-  private_ssh_key: str
+  ssh_key_path: str
   other_ssh_options: str
 
 map:

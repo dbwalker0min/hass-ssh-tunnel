@@ -5,24 +5,17 @@ echo "Starting SSH tunnel..."
 
 ls /config
 
-# Write the private SSH key to a temporary file
-PRIVATE_SSH_KEY=$(bashio::config 'private_ssh_key')
-if [ -n "$PRIVATE_SSH_KEY" ]; then
-    echo "$PRIVATE_SSH_KEY" > /tmp/ssh_key
-    chmod 600 /tmp/ssh_key
-    SSH_IDENTITY="/tmp/ssh_key"
-    cat $SSH_IDENTITY
-else
-    echo "Error: private_ssh_key is not set in the configuration."
-    exit 1
-fi
-
 SSH_HOST=$(bashio::config 'ssh_host')
 REMOTE_PORT=$(bashio::config 'remote_port' 8123)
 LOCAL_HOST=$(bashio::config 'local_host' 'localhost')
 LOCAL_PORT=$(bashio::config 'local_port' 8123)
 SSH_USER=$(bashio::config 'ssh_user' 'homeassistant')
 OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
+SSH_KEY_PATH=$(bashio::config 'ssh_key_path')
+
+if [ ! -f "$SSH_KEY_PATH" ]; then
+    echo "path to SSH key not found: $SSH_KEY_PATH"
+fi
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → $LOCAL_HOST:$LOCAL_PORT) as $SSH_USER"
 
@@ -44,7 +37,8 @@ while true; do
     chmod 600 /root/.ssh/known_hosts
 
     eval autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
-        -i ${SSH_IDENTITY} \
+        -n \
+        -i ${SSH_KEY_PATH} \
         ${OTHER_SSH_OPTIONS} \
         ${SSH_USER}@${SSH_HOST} 2>&1
     EXIT_CODE=$?
