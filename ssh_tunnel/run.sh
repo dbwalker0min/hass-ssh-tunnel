@@ -24,6 +24,17 @@ OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → $LOCAL_HOST:$LOCAL_PORT) as $SSH_USER"
 
 while true; do
+    # check to see if the host is reachable by doing a keyscan
+    # if it is not reachable, wait 10 seconds and try again
+    if ! ssh-keyscan -t ed25519 "$SSH_HOST" > /root/.ssh/known_hosts 2>&1; then
+        echo "$(date '+%Y-%m-%d %H:%M:%S') Host $SSH_HOST is not reachable; retrying in 10 seconds..."
+        sleep 10
+        continue
+    fi
+
+    # assure the permissions are correct
+    chmod 600 /root/.ssh/known_hosts
+    
     eval autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
         -i ${SSH_IDENTITY} \
         ${OTHER_SSH_OPTIONS} \
