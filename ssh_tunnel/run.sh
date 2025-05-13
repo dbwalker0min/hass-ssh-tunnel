@@ -13,8 +13,11 @@ SSH_USER=$(bashio::config 'ssh_user' 'homeassistant')
 OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 SSH_KEY_PATH=$(bashio::config 'ssh_key_path')
 
-if [ ! -f "$SSH_KEY_PATH" ]; then
+if [ -f "$SSH_KEY_PATH" ]; then
+    chmod 600 "$SSH_KEY_PATH"
+else
     echo "path to SSH key not found: $SSH_KEY_PATH"
+    exit 1
 fi
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → $LOCAL_HOST:$LOCAL_PORT) as $SSH_USER"
