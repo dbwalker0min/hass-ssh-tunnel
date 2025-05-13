@@ -12,7 +12,7 @@ boot: auto
 host_network: true
 options:
   ssh_host: name_of_your_ssh_host
-  ssh_user: root
+  ssh_user: homeassistant
   remote_port: 8123
   local_host: localhost
   local_port: 8123
@@ -20,7 +20,8 @@ options:
     -----BEGIN RSA PRIVATE KEY-----
     YourPrivateKeyHere
     -----END RSA PRIVATE KEY-----
-  other_ssh_options: other_ssh_options
+  other_ssh_options: -o "ServerAliveInterval 60" -o "ServerAliveCountMax 5"
+
 schema:
   ssh_host: str
   ssh_user: str

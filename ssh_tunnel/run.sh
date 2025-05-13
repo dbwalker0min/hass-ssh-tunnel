@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/usr/bin/with-contenv bashio
 # shellcheck shell=bash
 
 echo "Starting SSH tunnel..."
@@ -18,13 +18,13 @@ SSH_HOST=$(bashio::config 'ssh_host')
 REMOTE_PORT=$(bashio::config 'remote_port' 8123)
 LOCAL_HOST=$(bashio::config 'local_host' 'localhost')
 LOCAL_PORT=$(bashio::config 'local_port' 8123)
-SSH_USER=$(bashio::config 'ssh_user' 'root')
+SSH_USER=$(bashio::config 'ssh_user' 'homeassistant')
 OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST (remote port: $REMOTE_PORT → $LOCAL_HOST:$LOCAL_PORT) as $SSH_USER"
 
 while true; do
-    autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
+    eval autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
         -i ${SSH_IDENTITY} \
         ${OTHER_SSH_OPTIONS} \
         ${SSH_USER}@${SSH_HOST} 2>&1
