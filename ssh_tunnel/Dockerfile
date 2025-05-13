@@ -4,10 +4,10 @@ FROM $BUILD_FROM
 RUN apk update && apk add autossh bash
 
 COPY run.sh /run.sh
-COPY etc/services.d/ /etc/services.d/
+RUN chmod +x /run.sh
+# COPY etc/services.d/ /etc/services.d/
 
 # make sure the shell scripts are executable
-RUN chmod +x /run.sh /etc/services.d/ssh-tunnel/run
+# RUN chmod +x /run.sh /etc/services.d/ssh-tunnel/run
 
-RUN ls -l /etc/services.d/ssh-tunnel/
-
+CMD ["/run.sh"]
