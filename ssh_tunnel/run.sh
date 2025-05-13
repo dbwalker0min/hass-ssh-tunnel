@@ -3,6 +3,8 @@
 
 echo "Starting SSH tunnel..."
 
+ls /config
+
 # Write the private SSH key to a temporary file
 PRIVATE_SSH_KEY=$(bashio::config 'private_ssh_key')
 if [ -n "$PRIVATE_SSH_KEY" ]; then
