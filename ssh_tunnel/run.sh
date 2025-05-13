@@ -9,6 +9,7 @@ if [ -n "$PRIVATE_SSH_KEY" ]; then
     echo "$PRIVATE_SSH_KEY" > /tmp/ssh_key
     chmod 600 /tmp/ssh_key
     SSH_IDENTITY="/tmp/ssh_key"
+    cat $SSH_IDENTITY
 else
     echo "Error: private_ssh_key is not set in the configuration."
     exit 1
@@ -30,6 +31,7 @@ chmod 700 /root/.ssh
 while true; do
     # check to see if the host is reachable by doing a keyscan
     # if it is not reachable, wait 10 seconds and try again
+    echo "Scan keys"
     if ! ssh-keyscan -t ed25519 "$SSH_HOST" > /root/.ssh/known_hosts 2>&1; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') Host $SSH_HOST is not reachable; retrying in 10 seconds..."
         sleep 10
