@@ -39,7 +39,7 @@ while true; do
     # assure the permissions are correct
     chmod 600 /root/.ssh/known_hosts
 
-    eval autossh -M 0 -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
+    eval autossh -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
         -n \
         -i ${SSH_KEY_PATH} \
         ${OTHER_SSH_OPTIONS} \
