@@ -3,8 +3,6 @@
 
 echo "Starting SSH tunnel..."
 
-ls /config
-
 SSH_HOST=$(bashio::config 'ssh_host')
 REMOTE_PORT=$(bashio::config 'remote_port' 8123)
 LOCAL_HOST=$(bashio::config 'local_host' 'localhost')
@@ -39,6 +37,7 @@ while true; do
     # assure the permissions are correct
     chmod 600 /root/.ssh/known_hosts
 
+    echo "Starting autossh with ${OTHER_SSH_OPTIONS}"
     eval autossh -N -R ${REMOTE_PORT}:${LOCAL_HOST}:${LOCAL_PORT} \
         -n \
         -i ${SSH_KEY_PATH} \
