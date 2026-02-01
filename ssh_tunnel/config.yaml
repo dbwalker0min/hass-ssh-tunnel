@@ -1,5 +1,5 @@
 name: SSH Tunnel for Home Assistant
-version: '1.0.4'
+version: '1.0.5'
 slug: ssh_tunnel
 description: Persistent SSH tunnel for Home Assistant
 startup: application
@@ -14,6 +14,7 @@ options:
   ssh_host: name_of_your_ssh_host
   ssh_user: homeassistant
   ssh_key_path: /config/ssh_tunnel_private_key
+  other_ssh_options:
 
 schema:
   ssh_host: str
