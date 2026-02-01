@@ -4,11 +4,12 @@
 echo "Starting SSH tunnel..."
 
 SSH_HOST=$(bashio::config 'ssh_host')
-LOCAL_FWD_HOST="127.0.0.1"
-REMOTE_BIND_HOST="127.0.0.1"
 SSH_USER=$(bashio::config 'ssh_user' 'homeassistant')
 OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 SSH_KEY_PATH=$(bashio::config 'ssh_key_path')
+
+LOCAL_FWD_HOST="127.0.0.1"
+REMOTE_BIND_HOST="127.0.0.1"
 
 if [ -f "$SSH_KEY_PATH" ]; then
     chmod 600 "$SSH_KEY_PATH"
