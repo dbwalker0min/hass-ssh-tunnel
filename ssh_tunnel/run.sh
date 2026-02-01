@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bashio
 # shellcheck shell=bash
-
+set -x
 echo "Starting SSH tunnel..."
 
 SSH_HOST=$(bashio::config 'ssh_host')
