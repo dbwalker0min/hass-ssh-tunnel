@@ -67,7 +67,6 @@ while true; do
         -o ServerAliveInterval=60 \
         -o ServerAliveCountMax=5 \
         -o ExitOnForwardFailure=yes \
-        ${OTHER_SSH_OPTIONS} \
         "${SSH_USER}@${SSH_HOST}" 2>&1
     EXIT_CODE=$?
     echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel disconnected; retrying..."
