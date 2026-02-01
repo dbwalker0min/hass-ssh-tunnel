@@ -1,5 +1,5 @@
 name: SSH Tunnel for Home Assistant
-version: '1.0.2'
+version: '1.0.3'
 slug: ssh_tunnel
 description: Persistent SSH tunnel for Home Assistant
 startup: application
@@ -13,18 +13,13 @@ host_network: true
 options:
   ssh_host: name_of_your_ssh_host
   ssh_user: homeassistant
-  remote_port: 8123
   local_host: localhost
-  local_port: 8123
   ssh_key_path: /config/ssh_tunnel_private_key
-  other_ssh_options: -M 20000 -o "ServerAliveInterval 60" -o "ServerAliveCountMax 5"
 
 schema:
   ssh_host: str
   ssh_user: str
-  remote_port: port
   local_host: str
-  local_port: port
   ssh_key_path: str
   other_ssh_options: str
 
