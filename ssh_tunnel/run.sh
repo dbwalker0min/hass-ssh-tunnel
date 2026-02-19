@@ -9,6 +9,8 @@ SSH_KEY_PATH=$(bashio::config 'ssh_key_path')
 
 LOCAL_FWD_HOST="127.0.0.1"
 REMOTE_BIND_HOST="127.0.0.1"
+SSH_DIR="/config/ssh_tunnel_ssh"
+KNOWN_HOSTS="$SSH_DIR/known_hosts"
 
 # Don't wait before restarting
 export AUTOSSH_GATETIME=0
@@ -21,6 +23,10 @@ else
     echo "path to SSH key not found: $SSH_KEY_PATH"
     exit 1
 fi
+
+if [ ! -s "$KNOWN_HOSTS" ]; then
+  echo "Populating known hosts for $SSH_HOST"
+  ssh-keyscan -t ed25519 "$SSH_HOST" > "$KNOWN"
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST as $SSH_USER"
 
@@ -66,6 +72,8 @@ while true; do
         -o BatchMode=yes \
         -o TCPKeepAlive=yes \
         -o ExitOnForwardFailure=yes \
+        -o UserKnownHostsFile=$KNOWN_HOSTS \
+        -o StrictHostKeyChecking=yes \
         "${SSH_USER}@${SSH_HOST}" 2>&1
     EXIT_CODE=$?
     echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel disconnected; retrying..."
