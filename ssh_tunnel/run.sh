@@ -32,9 +32,6 @@ chmod 700 /root/.ssh
 
 while true; do
 
-    # assure the permissions are correct
-    chmod 600 /root/.ssh/known_hosts
-
     echo "Starting autossh"
 
     # This starts the autossh command forwarding the home assistant port and the pyscript kernel ports
