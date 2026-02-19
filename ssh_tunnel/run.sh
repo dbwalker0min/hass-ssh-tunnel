@@ -5,11 +5,15 @@ echo "Starting SSH tunnel..."
 
 SSH_HOST=$(bashio::config 'ssh_host')
 SSH_USER=$(bashio::config 'ssh_user' 'homeassistant')
-OTHER_SSH_OPTIONS=$(bashio::config 'other_ssh_options' '')
 SSH_KEY_PATH=$(bashio::config 'ssh_key_path')
 
 LOCAL_FWD_HOST="127.0.0.1"
 REMOTE_BIND_HOST="127.0.0.1"
+
+# Don't wait before restarting
+export AUTOSSH_GATETIME=0
+export AUTOSSH_POLL=30
+export AUTOSSH_FIRST_POLL=30
 
 if [ -f "$SSH_KEY_PATH" ]; then
     chmod 600 "$SSH_KEY_PATH"
@@ -25,19 +29,11 @@ mkdir -p /root/.ssh
 chmod 700 /root/.ssh
 
 while true; do
-    # check to see if the host is reachable by doing a keyscan
-    # if it is not reachable, wait 10 seconds and try again
-    echo "Scan keys"
-    if ! ssh-keyscan -t ed25519 "$SSH_HOST" > /root/.ssh/known_hosts 2>&1; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') Host $SSH_HOST is not reachable; retrying in 10 seconds..."
-        sleep 10
-        continue
-    fi
 
     # assure the permissions are correct
     chmod 600 /root/.ssh/known_hosts
 
-    echo "Starting autossh with ${OTHER_SSH_OPTIONS}"
+    echo "Starting autossh"
 
     # This starts the autossh command forwarding the home assistant port and the pyscript kernel ports
     autossh -N \
@@ -66,6 +62,9 @@ while true; do
         -M 20000 \
         -o ServerAliveInterval=60 \
         -o ServerAliveCountMax=5 \
+        -o ConnectTimeout=10 \
+        -o BatchMode=yes \
+        -o TCPKeepAlive=yes \
         -o ExitOnForwardFailure=yes \
         "${SSH_USER}@${SSH_HOST}" 2>&1
     EXIT_CODE=$?

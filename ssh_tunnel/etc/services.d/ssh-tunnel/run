@@ -1,6 +1,0 @@
-#!/usr/bin/with-contenv bash
-# shellcheck shell=bash
-
-# Run in s6
-echo "Starting SSH tunnel service..."
-exec /run.sh
