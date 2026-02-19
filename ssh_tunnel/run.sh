@@ -24,10 +24,6 @@ else
     exit 1
 fi
 
-if [ ! -s "$KNOWN_HOSTS" ]; then
-  echo "Populating known hosts for $SSH_HOST"
-  ssh-keyscan -t ed25519 "$SSH_HOST" > "$KNOWN"
-
 echo "$(date '+%Y-%m-%d %H:%M:%S') Tunnel starting to $SSH_HOST as $SSH_USER"
 
 # Make sure the .ssh directory exists and has the correct permissions
